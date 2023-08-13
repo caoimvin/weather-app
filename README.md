@@ -9,6 +9,11 @@
 
 ## How to install
 
+rename `.env.example` to `.env` and add `API_KEY` for openweathermap.org
+
+create sqlite database for city names with `./backend/data/seed.sh` script
+
+build and run project
 ```
 docker-compose build
 docker-compose up
