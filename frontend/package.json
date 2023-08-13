@@ -1,0 +1,21 @@
+{
+  "name": "weatherapp",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port=3000",
+    "build": "vite build",
+    "preview": "vite preview --port=3000"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "sass": "^1.65.1",
+    "vite": "^4.4.5",
+    "vite-svg-loader": "^4.0.0"
+  }
+}
