@@ -5,36 +5,8 @@ const axios = require('axios')
 const redis = require('redis')
 const path = require('path')
 const { formatResponse } = require('./formatting')
-const sqlite3 = require('sqlite3').verbose()
-
-const db_name = path.join(__dirname, 'data', 'cities.db')
-const db = new sqlite3.Database(db_name, err => {
-    if (err) return console.log(err.message)
-    console.log('connected to database cities.db');
-})
-
-async function findCity(city) {
-    if (!city || city === '') return []
-    const limit = 6
-    const sql = `SELECT * FROM cities WHERE name LIKE ? LIMIT ${limit}`
-    return new Promise((resolve, reject) => {
-        db.all(sql, [`%${city}%`], (err, rows) => {
-            if (err) return reject(err.message);
-            resolve(rows)
-        })
-    })
-}
-async function addCities(cities) {
-    if (!cities || !cities.length) return []
-    const values = cities.map(city => `('${city.name}', '${city.lat}', '${city.lon}', '${city.country}', '${city.state}')`)
-    const sql = `INSERT INTO cities (name, lat, lon, country, state) VALUES ${values.join(',')}`
-    return new Promise((resolve, reject) => {
-        db.run(sql, (err) => {
-            if (err) return reject(err.message)
-            resolve()
-        })
-    })
-}
+const db = require('./data/config')
+const { findCity, addCities } = require('./data/queries')
 
 const app = express()
 const port = process.env.PORT || 8000
@@ -88,7 +60,7 @@ app.get('/geocode', async (req, res) => {
         })
     }
 
-    const data = await findCity(city)
+    const data = await findCity(db, city)
     if (data && data.length) return res.json({
         cache: false,
         message: 'city found in database',
@@ -97,7 +69,7 @@ app.get('/geocode', async (req, res) => {
 
     let { data: cities } = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=6&appid=${process.env.API_KEY}`)
     cities = cities.map(entry => ({ name: entry.name, lat: entry.lat, lon: entry.lon, country: entry.country, state: entry.state }))
-    await addCities(cities)
+    await addCities(db, cities)
 
     res.json({
         cache: false,
