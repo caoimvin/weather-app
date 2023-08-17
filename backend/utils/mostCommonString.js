@@ -1,3 +1,8 @@
+/**
+ * Find the most common string inside an array
+ * @param {Array} array 
+ * @returns {String}
+ */
 function mostCommonString(array) {
     if (array.length == 0) return null
     const stringMap = {}

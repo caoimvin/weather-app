@@ -23,10 +23,14 @@ let redisClient
 
 app.use(cors())
 
+/**
+ * Get cached response data from redis 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ * @param {express.NextFunction} next 
+ */
 async function cacheData(req, res, next) {
-    let key
-    if (req.route.path === '/geocode') key = req.query.city
-    else key = `${req.query.lat}&${req.query.lon}`
+    const key = `${req.query.lat}&${req.query.lon}`
     let results
     try {
         const cachedResults = await redisClient.get(key)

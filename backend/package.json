@@ -7,7 +7,8 @@
     "test": "jest",
     "serve": "nodemon index.js",
     "build": "NODE_ENV=production webpack",
-    "watch": "NODE_ENV=development webpack --watch"
+    "watch": "NODE_ENV=development webpack --watch",
+    "jsdoc": "jsdoc index.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "jest": "^29.6.2",
+    "jsdoc": "^4.0.2",
     "nodemon": "^3.0.1"
   }
 }

@@ -1,3 +1,9 @@
+/**
+ * Find city in sqlite database by name
+ * @param {*} db 
+ * @param {Object} city 
+ * @returns 
+ */
 async function findCity(db, city) {
     if (!city || city === '') return []
     const limit = 6
@@ -10,6 +16,12 @@ async function findCity(db, city) {
     })
 }
 
+/**
+ * Add cities to sqlite database
+ * @param {*} db 
+ * @param {Array} cities 
+ * @returns 
+ */
 async function addCities(db, cities) {
     if (!cities || !cities.length) return []
     const values = cities.map(city => `('${city.name}', '${city.lat}', '${city.lon}', '${city.country}', '${city.state}')`)
