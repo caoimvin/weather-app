@@ -97,7 +97,8 @@ The following graph describes the structure of this application. It is explained
 
 ## Future improvements
 
-- [ ] Instead of caching the OpenWeather geocode response, add the data to the SQlite cities database, because Latitude and longitude coordinates never change.
+- [x] Instead of caching the OpenWeather geocode response, add the data to the SQlite cities database, because Latitude and longitude coordinates never change.
+- [ ] Persist cities database, so that added cities will be saved properly.
 
 ## Resources
 

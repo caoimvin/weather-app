@@ -24,6 +24,17 @@ async function findCity(city) {
         })
     })
 }
+async function addCities(cities) {
+    if (!cities || !cities.length) return []
+    const values = cities.map(city => `('${city.name}', '${city.lat}', '${city.lon}', '${city.country}', '${city.state}')`)
+    const sql = `INSERT INTO cities (name, lat, lon, country, state) VALUES ${values.join(',')}`
+    return new Promise((resolve, reject) => {
+        db.run(sql, (err) => {
+            if (err) return reject(err.message)
+            resolve()
+        })
+    })
+}
 
 const app = express()
 const port = process.env.PORT || 8000
@@ -67,7 +78,7 @@ app.get('/', (req, res) => {
     res.json('docker works')
 })
 
-app.get('/geocode', cacheData, async (req, res) => {
+app.get('/geocode', async (req, res) => {
     const city = req.query.city
     if (!city || city === '') {
         return res.json({
@@ -86,15 +97,11 @@ app.get('/geocode', cacheData, async (req, res) => {
 
     let { data: cities } = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=6&appid=${process.env.API_KEY}`)
     cities = cities.map(entry => ({ name: entry.name, lat: entry.lat, lon: entry.lon, country: entry.country, state: entry.state }))
-
-    await redisClient.set(city, JSON.stringify(cities), {
-        EX: 86400,
-        NX: true
-    })
+    await addCities(cities)
 
     res.json({
         cache: false,
-        message: '',
+        message: 'cities add to database',
         data: cities
     })
 })
