@@ -95,7 +95,7 @@ export default {
     },
     async chooseCity({ lat, lon }) {
       const { data: response } = await axios.get(`
-        http://localhost:8000/forecast?lat=${lat}&lon=${lon}
+        http://${window.location.hostname}:8000/forecast?lat=${lat}&lon=${lon}
       `)
       if (!response.data.forecast) return
       this.current = response.data.current
@@ -105,7 +105,7 @@ export default {
     },
     async getCoordinatesFromService(search) {
       const { data: response } = await axios.get(
-        `http://localhost:8000/geocode?city=${search}`
+        `http://${window.location.hostname}:8000/geocode?city=${search}`
       );
       this.cities = response.data;
     },
